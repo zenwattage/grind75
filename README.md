@@ -1,2 +1,2 @@
-# grind75
+# pracProbs
 A repo of practice problems. 
