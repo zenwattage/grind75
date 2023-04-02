@@ -1,7 +1,7 @@
-// Import the required modules
 const express = require('express');
 const crypto = require('crypto');
 const cors = require('cors');
+
 // Create an Express application
 const app = express();
 const port = 3000;
@@ -23,8 +23,7 @@ function hashUserID(userID) {
     return hash;
 }
 
-// A mock user database (in a real-world scenario, use a proper database)
-const users = [];
+// A mock user database to store registered users
 
 // User registration API
 app.post('/register', (req, res) => {
@@ -61,7 +60,7 @@ app.post('/login', (req, res) => {
 
     // Hash the provided username to find the corresponding user ID
     const hashedUserID = hashUserID(username);
-    // Search for the user with the hashed user ID and matching password in the mock database
+    // Search for the user with the hashed user ID and matching password in the database
     const user = users.find(u => u.id === hashedUserID && u.password === password);
 
     // If no matching user is found, return an error response
