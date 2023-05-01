@@ -1,23 +1,39 @@
 //prototype pattern
 //create copies from examples
 //
-//prototype
-function Car(model, price) {
-    this.model = model;
-    this.price = price;
+// Define the Prototype interface, which specifies the clone method
+class Prototype {
+    clone() { }
 }
 
-Car.prototype = {
-    constructor: Car,
-    assemble: function () {
-        console.log("Assemble");
+// Define Concrete Prototypes, which implement the Prototype interface and provide a way to clone themselves
+class ConcretePrototype1 extends Prototype {
+    constructor() {
+        super();
+        this.property1 = "Property 1";
+        this.property2 = "Property 2";
+    }
+
+    clone() {
+        return new ConcretePrototype1();
     }
 }
 
-//client
-var civic = new Car("Civic", 10000);
-civic.assemble();
+class ConcretePrototype2 extends Prototype {
+    constructor() {
+        super();
+        this.property3 = "Property 3";
+        this.property4 = "Property 4";
+    }
 
-var accord = new Car("Accord", 20000);
-accord.assemble();
+    clone() {
+        return new ConcretePrototype2();
+    }
+}
 
+// Use the Concrete Prototypes to create new objects
+const prototype1 = new ConcretePrototype1();
+const clone1 = prototype1.clone();
+
+const prototype2 = new ConcretePrototype2();
+const clone2 = prototype2.clone();

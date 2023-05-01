@@ -1,44 +1,71 @@
 //builder
 //build object step by step
 
-//lego master
-function Director() {
-    this.construct = function (builder) {
-        builder.step1();
-        builder.step2();
-        return builder.get();
+// Define the Product class that the Builder builds
+class Product {
+    constructor() {
+        this.parts = [];
+    }
+
+    add(part) {
+        this.parts.push(part);
+    }
+
+    show() {
+        console.log(`Product Parts: ${this.parts.join(", ")}`);
     }
 }
 
-//lego builder
-function CarBuilder() {
-    this.car = null;
-    this.step1 = function () {
-        this.car = new Car();
+// Define the Builder interface, which specifies methods for building the Product
+class Builder {
+    buildPartA() { }
+    buildPartB() { }
+    buildPartC() { }
+    getResult() { }
+}
+
+// Define a Concrete Builder, which implements the Builder interface and builds a specific Product
+class ConcreteBuilder extends Builder {
+    constructor() {
+        super();
+        this.product = new Product();
     }
-    this.step2 = function () {
-        this.car.addParts();
+
+    buildPartA() {
+        this.product.add("Part A");
     }
-    this.get = function () {
-        return this.car;
+
+    buildPartB() {
+        this.product.add("Part B");
+    }
+
+    buildPartC() {
+        this.product.add("Part C");
+    }
+
+    getResult() {
+        return this.product;
     }
 }
 
-//lego
-function Car() {
-    this.name = null;
-    this.price = null;
-    this.addParts = function () {
-        this.name = "Civic";
-        this.price = 10000;
+// Use the Director to construct a Product using the ConcreteBuilder
+class Director {
+    constructor(builder) {
+        this.builder = builder;
+    }
+
+    construct() {
+        this.builder.buildPartA();
+        this.builder.buildPartB();
+        this.builder.buildPartC();
+        return this.builder.getResult();
     }
 }
 
-//client
+// Use the Director and ConcreteBuilder to create a Product
+const builder = new ConcreteBuilder();
+const director = new Director(builder);
+const product = director.construct();
 
-var director = new Director();
-var carBuilder = new CarBuilder();
-var car = director.construct(carBuilder);
-console.log(car.name);
-console.log(car.price);
+product.show();
 

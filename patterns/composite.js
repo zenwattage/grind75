@@ -1,64 +1,76 @@
 //composite pattern
 //create tree-like structure
 
-//tree builder
-function TreeBuilder() {
-    this.build = function () {
-        var tree = new Tree("root");
-        var branch1 = new Tree("branch1");
-        var branch2 = new Tree("branch2");
-        var leaf1 = new Tree("leaf1");
-        var leaf2 = new Tree("leaf2");
-        var leaf3 = new Tree("leaf3");
-        var leaf4 = new Tree("leaf4");
+// Define the Component interface, which provides a common interface for all objects in the composition
+class Component {
+    constructor(name) {
+        this.name = name;
+    }
 
-        tree.add(branch1);
-        tree.add(branch2);
-        branch1.add(leaf1);
-        branch1.add(leaf2);
-        branch2.add(leaf3);
-        branch2.add(leaf4);
+    add(component) { }
+    remove(component) { }
+    getChild(index) { }
+    operation() { }
+}
 
-        tree.traverse();
+// Define Leaf components, which represent the individual objects in the composition
+class Leaf extends Component {
+    constructor(name) {
+        super(name);
+    }
+
+    operation() {
+        console.log(`Leaf ${this.name}: Operation`);
     }
 }
 
-//tree
-function Tree(name) {
-    this.name = name;
-    this.children = [];
-}
+// Define Composite components, which represent groups of objects in the composition
+class Composite extends Component {
+    constructor(name) {
+        super(name);
+        this.children = [];
+    }
 
-Tree.prototype = {
-    constructor: Tree,
-    add: function (child) {
-        this.children.push(child);
+    add(component) {
+        this.children.push(component);
     }
-    , remove: function (child) {
-        var length = this.children.length;
-        for (var i = 0; i < length; i++) {
-            if (this.children[i] === child) {
-                this.children.splice(i, 1);
-                return;
-            }
-        }
+
+    remove(component) {
+        const componentIndex = this.children.indexOf(component);
+        this.children.splice(componentIndex, 1);
     }
-    , getChild: function (i) {
-        return this.children[i];
+
+    getChild(index) {
+        return this.children[index];
     }
-    , hasChildren: function () {
-        return this.children.length > 0;
-    }
-    , traverse: function () {
-        console.log(this.name);
-        var length = this.children.length;
-        for (var i = 0; i < length; i++) {
-            this.children[i].traverse();
+
+    operation() {
+        console.log(`Composite ${this.name}: Operation`);
+        for (const child of this.children) {
+            child.operation();
         }
     }
 }
 
-//client
-var treeBuilder = new TreeBuilder();
-treeBuilder.build();
+// Use the Composite to create a tree-like structure of Components
+const root = new Composite("Root");
+const branch1 = new Composite("Branch 1");
+const branch2 = new Composite("Branch 2");
+
+const leaf1 = new Leaf("Leaf 1");
+const leaf2 = new Leaf("Leaf 2");
+const leaf3 = new Leaf("Leaf 3");
+const leaf4 = new Leaf("Leaf 4");
+
+branch1.add(leaf1);
+branch1.add(leaf2);
+
+branch2.add(leaf3);
+branch2.add(leaf4);
+
+root.add(branch1);
+root.add(branch2);
+
+root.operation();
+
 

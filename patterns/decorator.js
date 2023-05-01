@@ -1,56 +1,70 @@
 //decorator pattern
 // add new features to existing objects
 
-//customizer
-function Customizer() {
-    this.customize = function (car) {
-        car.customize();
+// Define the Component interface, which specifies the methods that ConcreteComponents and Decorators must implement
+class Component {
+    operation() { }
+}
+
+// Define the ConcreteComponent, which implements the Component interface and provides the core functionality
+class ConcreteComponent extends Component {
+    operation() {
+        console.log("ConcreteComponent: Operation");
     }
 }
 
-//car
-function Car() {
-    this.customize = function () {
-        console.log("Car");
+// Define the Decorator, which implements the Component interface and adds behavior to the ConcreteComponent
+class Decorator extends Component {
+    constructor(component) {
+        super();
+        this.component = component;
+    }
+
+    operation() {
+        this.component.operation();
     }
 }
 
-//decorator
-function Decorator(car) {
-    this.car = car;
-    this.customize = function () {
-        this.car.customize();
+// Define ConcreteDecorators, which add specific behavior to the Component
+class ConcreteDecoratorA extends Decorator {
+    constructor(component) {
+        super(component);
+    }
+
+    operation() {
+        super.operation();
+        console.log("ConcreteDecoratorA: Operation");
     }
 }
 
-//concrete decorator
-function ColorDecorator(car) {
-    Decorator.call(this, car);
-    this.customize = function () {
-        this.car.customize();
-        console.log("Color");
+class ConcreteDecoratorB extends Decorator {
+    constructor(component) {
+        super(component);
+    }
+
+    operation() {
+        super.operation();
+        this.addBehavior();
+    }
+
+    addBehavior() {
+        console.log("ConcreteDecoratorB: Added behavior");
     }
 }
 
-//concrete decorator
-function EngineDecorator(car) {
-    Decorator.call(this, car);
-    this.customize = function () {
-        this.car.customize();
-        console.log("Engine");
-    }
-}
+// Use the Decorators to add behavior to the ConcreteComponent
+const component = new ConcreteComponent();
+const decoratorA = new ConcreteDecoratorA(component);
+const decoratorB = new ConcreteDecoratorB(decoratorA);
 
-//client
-var car = new Car();
-car.customize();
+decoratorB.operation();
 
-var colorDecorator = new ColorDecorator(car);
-colorDecorator.customize();
+/* In this example, we have a Component interface that specifies the methods that ConcreteComponents and Decorators must implement.We define a ConcreteComponent class that implements the Component interface and provides the core functionality.
 
-var engineDecorator = new EngineDecorator(car);
-engineDecorator.customize();
+We define a Decorator class that implements the Component interface and adds behavior to the ConcreteComponent.The Decorator class contains a reference to a Component object, which it decorates by calling the component's operation method and then adding its own behavior.
 
-var colorEngineDecorator = new EngineDecorator(colorDecorator);
-colorEngineDecorator.customize();
+We define ConcreteDecorator classes that add specific behavior to the Component.Each ConcreteDecorator takes a Component object as a parameter and adds its own behavior to the decorated component's operation method.
 
+We create instances of the ConcreteComponent and use ConcreteDecorator classes to add behavior to it.We can chain multiple decorators together to add multiple behaviors to the ConcreteComponent.
+
+In this way, the Decorator pattern allows us to add behavior to objects dynamically at runtime by wrapping them in a series of Decorator objects.This can be useful in situations where we want to add behavior to an object without modifying its source code. */

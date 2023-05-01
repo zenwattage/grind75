@@ -1,50 +1,44 @@
 //bridge pattern
 //link what it is to how it works
 
-//abstraction
-function Car(model, price) {
-    this.model = model;
-    this.price = price;
-}
+// Define the Abstraction interface, which provides high-level functionality to the client
+class Abstraction {
+    constructor(implementation) {
+        this.implementation = implementation;
+    }
 
-Car.prototype = {
-    constructor: Car,
-    assemble: function () {
-        console.log("Assemble");
+    operation() {
+        const implementationResult = this.implementation.operationImplementation();
+        console.log(`Abstraction: Base operation with implementation result: ${implementationResult}`);
     }
 }
 
-//refined abstraction
-function Civic(model, price) {
-    Car.call(this, model, price);
+// Define the Implementor interface, which provides low-level functionality that Abstraction can rely on
+class Implementor {
+    operationImplementation() { }
 }
 
-Civic.prototype = Object.create(Car.prototype);
-Civic.prototype.constructor = Civic;
-
-Civic.prototype.assemble = function () {
-    console.log("Civic");
+// Define Concrete Implementors, which provide specific implementations of the Implementor interface
+class ConcreteImplementorA extends Implementor {
+    operationImplementation() {
+        return "ConcreteImplementorA: Operation";
+    }
 }
 
-//refined abstraction
-function Accord(model, price) {
-    Car.call(this, model, price);
+class ConcreteImplementorB extends Implementor {
+    operationImplementation() {
+        return "ConcreteImplementorB: Operation";
+    }
 }
 
-Accord.prototype = Object.create(Car.prototype);
-Accord.prototype.constructor = Accord;
+// Use the Abstraction and Implementor together to provide different combinations of functionality
+const implementationA = new ConcreteImplementorA();
+const abstractionA = new Abstraction(implementationA);
+abstractionA.operation();
 
-Accord.prototype.assemble = function () {
-    console.log("Accord");
-}
-
-//client
-var civic = new Civic("Civic", 10000);
-civic.assemble();
-
-var accord = new Accord("Accord", 20000);
-accord.assemble();
-
+const implementationB = new ConcreteImplementorB();
+const abstractionB = new Abstraction(implementationB);
+abstractionB.operation();
 
 
 
